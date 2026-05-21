@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>Humanizer — Markdown-Safe AI Text Rewriter | Free</title>
+  <meta name="description" content="Free AI text humanizer that preserves Markdown. Detect AI patterns, rewrite long sentences, keep your formatting intact. Runs on Cloudflare.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Humanizer — Free AI Text Humanizer">
+  <meta property="og:description" content="Detect AI patterns and rewrite text to sound human. Preserves Markdown. Free, no signup, edge-fast.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Marked.js for in-browser Markdown preview -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23f97316'/></svg>">
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Humanizer",
+    "applicationCategory": "WebApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="wrap">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <a href="/" class="logo">
+        <span class="logo-dot"></span>
+        Humanizer
+      </a>
+      <nav class="nav">
+        <a href="#tool">Humanize</a>
+        <a href="#help">Help</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Make AI text<br>sound <em>human.</em></h1>
+      <p>Detect AI-style patterns, find long sentences, and rewrite them — all while preserving your Markdown. Code blocks, tables, headings, and lists stay untouched.</p>
+      <div class="badges-row">
+        <span class="badge">Free, no signup</span>
+        <span class="badge">Markdown safe</span>
+        <span class="badge">Runs on Cloudflare</span>
+      </div>
+    </section>
+
+    <!-- INFO ROW -->
+    <div class="info-row">
+      <div class="info-card">
+        <div class="num">~1s</div>
+        <div class="label">In-browser pattern detection. No upload.</div>
+      </div>
+      <div class="info-card">
+        <div class="num">3</div>
+        <div class="label">Rewrite modes — conservative, natural, aggressive.</div>
+      </div>
+      <div class="info-card">
+        <div class="num">MD</div>
+        <div class="label">Code, tables, headings, lists, front matter all protected.</div>
+      </div>
+    </div>
+
+    <!-- TOOL -->
+    <div class="tool" id="tool">
+      <div class="tool-tabs">
+        <div class="tab-group" data-pane="input">
+          <button class="tab active" data-view="edit" data-target="input">Edit</button>
+          <button class="tab" data-view="preview" data-target="input">Preview</button>
+        </div>
+        <div class="tab-group" data-pane="output">
+          <button class="tab active" data-view="edit" data-target="output">Edit</button>
+          <button class="tab" data-view="preview" data-target="output">Preview</button>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-pane">
+          <div class="pane-head">
+            <span class="pane-label">Original Text</span>
+            <span class="pane-count" id="inputCount">0 words</span>
+          </div>
+          <textarea id="inputText" placeholder="Paste your AI-generated Markdown or plain text here..."></textarea>
+          <div class="preview" id="inputPreview" hidden></div>
+        </div>
+
+        <div class="tool-pane">
+          <div class="pane-head">
+            <span class="pane-label">Cleaned Result</span>
+            <span class="pane-count" id="outputCount">0 words</span>
+          </div>
+          <textarea id="outputText" placeholder="Your cleaner, more human draft appears here..."></textarea>
+          <div class="preview" id="outputPreview" hidden></div>
+        </div>
+      </div>
+
+      <!-- PRIMARY ACTIONS -->
+      <div class="actions">
+        <button class="btn btn-primary" id="cleanBtn">
+          <span class="spin"></span>
+          <span class="label-text">✦ Quick Clean</span>
+        </button>
+        <button class="btn btn-secondary" id="analyzeBtn">Analyze</button>
+        <button class="btn btn-secondary" id="rewriteBtn">
+          <span class="spin"></span>
+          <span class="label-text">AI Rewrite Long Sentences</span>
+        </button>
+        <button class="btn btn-secondary" id="applyBtn">Apply All Rewrites</button>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" id="copyBtn">Copy</button>
+        <button class="btn btn-ghost" id="downloadBtn">Download</button>
+        <button class="btn btn-ghost" id="clearBtn">Clear</button>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="advanced">
+        <button class="advanced-toggle" id="advancedToggle" aria-expanded="false">
+          <span>AI Rewrite Settings — provider, model, mode</span>
+          <span class="chev">▼</span>
+        </button>
+        <div class="advanced-body" id="advancedBody">
+          <div class="advanced-grid">
+            <div class="field">
+              <label for="provider">Provider</label>
+              <select id="provider">
+                <option value="cloudflare" selected>Cloudflare AI (free, no key needed)</option>
+                <option value="openai">OpenAI (your key)</option>
+                <option value="openrouter">OpenRouter (your key)</option>
+                <option value="gemini">Gemini (your key)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="model">Model</label>
+              <input id="model" value="@cf/meta/llama-3.1-8b-instruct" placeholder="@cf/meta/llama-3.1-8b-instruct">
+            </div>
+            <div class="field">
+              <label for="mode">Rewrite Mode</label>
+              <select id="mode">
+                <option value="conservative">Conservative — minimal changes</option>
+                <option value="natural" selected>Natural — balanced</option>
+                <option value="aggressive">Aggressive — full rewrite</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="apiKey">API Key <span class="hint-inline">(not needed for Cloudflare AI)</span></label>
+              <input id="apiKey" type="password" placeholder="Leave empty for free Cloudflare AI">
+            </div>
+          </div>
+          <label class="checkbox-row">
+            <input id="preserveMarkdown" type="checkbox" checked>
+            <span>Preserve Markdown formatting <span class="hint-inline">(protects code, tables, headings, lists, blockquotes, front matter)</span></span>
+          </label>
+          <p class="privacy-note">
+            With Cloudflare AI (default), no API key is needed — rewrites use the free Workers AI tier. With other providers, your key is sent only from your browser through Cloudflare to that provider; never stored.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATTERNS -->
+    <section class="section" id="help">
+      <h2>Detected patterns</h2>
+      <p class="section-sub">A breakdown of AI-style patterns in your text.</p>
+      <div class="score-card">
+        <div class="score-number" id="scoreNumber">—</div>
+        <div class="score-meta">
+          <span class="score-label">AI Pattern Score</span>
+          <span class="score-desc" id="scoreDesc">Paste text and click <strong>Analyze</strong> to see results.</span>
+        </div>
+      </div>
+      <ul class="issues" id="issues">
+        <li class="empty-state" style="border-left:none;">No patterns detected yet.</li>
+      </ul>
+    </section>
+
+    <!-- LONG SENTENCES -->
+    <section class="section">
+      <h2>Long sentence examples</h2>
+      <p class="section-sub">Each long sentence shows a mechanical short version. The AI rewrite below adds nuance.</p>
+      <div id="manualFixExamples" class="examples empty">No long sentence examples yet. Click <strong>Analyze</strong>.</div>
+    </section>
+
+    <!-- AI REWRITES -->
+    <section class="section">
+      <h2>AI rewrite results</h2>
+      <p class="section-sub">Each rewrite has its own <strong>Apply</strong> button so you can pick the ones you like.</p>
+      <div class="status" id="rewriteStatus">Ready.</div>
+      <div id="aiRewriteResults" class="examples empty">No AI rewrites yet.</div>
+    </section>
+
+    <!-- TIPS -->
+    <section class="section">
+      <h2>Manual polishing tips</h2>
+      <p class="section-sub">Final touches that no automated tool can fully replace.</p>
+      <ul class="issues">
+        <li><span class="issue-tag">tip</span> Replace most em-dashes (—) with periods or commas.</li>
+        <li><span class="issue-tag">tip</span> Break long, perfectly-balanced sentences into shorter ones.</li>
+        <li><span class="issue-tag">tip</span> Remove generic openers like "it is important to note" or "in today's world."</li>
+        <li><span class="issue-tag">tip</span> Add a concrete example wherever the text sounds vague.</li>
+        <li><span class="issue-tag">tip</span> Vary paragraph length. Uniformity is the loudest AI tell.</li>
+      </ul>
+    </section>
+
+    <p class="footnote">
+      Note: rewriting does not reliably defeat AI detectors, and detectors themselves are unreliable. Use this as an editing aid.
+    </p>
+
+    <!-- FOOTER -->
+    <footer class="foot">
+      <div>© 2026 Humanizer · Built on Cloudflare</div>
+      <div class="foot-links">
+        <a href="#help">Help</a>
+        <a href="#tool">Top</a>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

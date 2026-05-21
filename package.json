@@ -1,0 +1,13 @@
+{
+  "name": "humanizer-cf-pages",
+  "version": "1.0.0",
+  "description": "Markdown-safe AI text humanizer on Cloudflare Pages + Workers AI",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public --compatibility-date=2024-12-01 --ai AI",
+    "deploy": "wrangler pages deploy public --project-name=humanizer"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
